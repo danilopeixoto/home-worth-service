@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  database:
+    image: postgres:13.2
+    ports:
+      - '${DATABASE_PORT}:${DATABASE_PORT}'
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER_FILE=${DATABASE_USERNAME_FILE}
+      - POSTGRES_PASSWORD_FILE=${DATABASE_PASSWORD_FILE}
+    secrets:
+      - database_username
+      - database_password
+    volumes:
+      - database:/var/lib/postgresql/data/
+    networks:
+      lambda:
+        aliases:
+          - ${DATABASE_HOSTNAME}
+    command: postgres --port=${DATABASE_PORT}
+    restart: unless-stopped
+
+secrets:
+  database_username:
+    file: 'secrets/database_username'
+  database_password:
+    file: 'secrets/database_password'
+
+volumes:
+  database:
+
+networks:
+  lambda:

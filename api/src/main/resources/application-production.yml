@@ -1,0 +1,20 @@
+spring:
+  webflux:
+    base-path: /api/${API_VERSION}
+  r2dbc:
+    driver-class-name: org.postgresql.Driver
+    url: r2dbc:postgresql://${DATABASE_HOSTNAME}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${secrets.DATABASE_USERNAME_FILE}
+    password: ${secrets.DATABASE_PASSWORD_FILE}
+
+server:
+  port: ${API_PORT}
+
+api:
+  version: ${API_VERSION}
+
+springdoc:
+  api-docs:
+    path: /openapi
+  swagger-ui:
+    path: /docs
