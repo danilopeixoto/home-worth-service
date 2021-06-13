@@ -4,6 +4,7 @@ import com.meli.homeworth.api.model.ErrorResponseModel;
 import com.meli.homeworth.api.model.HouseAreaResponse;
 import com.meli.homeworth.api.model.HouseModel;
 import com.meli.homeworth.api.model.HouseValuationResponse;
+import com.meli.homeworth.api.service.DistrictService;
 import com.meli.homeworth.api.service.HomeAppraisalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import reactor.function.TupleUtils;
 
 import javax.validation.Valid;
 
@@ -27,6 +29,9 @@ import javax.validation.Valid;
 public class HouseController {
   @Autowired
   private HomeAppraisalService service;
+
+  @Autowired
+  private DistrictService districtService;
 
   @Operation(summary = "Calculate house area", responses = {
     @ApiResponse(
@@ -69,6 +74,10 @@ public class HouseController {
   })
   @PostMapping("/valuation")
   public Mono<HouseValuationResponse> calculateValuation(@Valid @RequestBody Mono<HouseModel> houseRequest) {
-    return this.service.calculateValuation(houseRequest);
+    return houseRequest
+      .flatMap(house -> Mono
+        .just(house)
+        .zipWith(this.districtService.findByName(house.getDistrict())))
+      .map(TupleUtils.function(this.service::calculateValuation));
   }
 }

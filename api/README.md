@@ -6,6 +6,12 @@ A home appraisal API.
 
 * [OpenJDK (>=11)](https://openjdk.java.net)
 
+## Tests
+
+* Controllers and services are testable.
+* Controller tests are unit or integration tests for the REST layer.
+* District-related tests not implemented.
+
 ## Copyright and license
 
 Copyright (c) 2021, Mercado Libre, Inc. All rights reserved.

@@ -1,6 +1,7 @@
 package com.meli.homeworth.api.controller;
 
 import com.meli.homeworth.api.model.DistrictModel;
+import com.meli.homeworth.api.model.DistrictPartialRequestModel;
 import com.meli.homeworth.api.model.DistrictRequestModel;
 import com.meli.homeworth.api.model.ErrorResponseModel;
 import com.meli.homeworth.api.service.DistrictService;
@@ -145,6 +146,40 @@ public class DistrictController {
     @Valid @PathVariable UUID id,
     @Valid @RequestBody Mono<DistrictRequestModel> districtRequest) {
     return this.service.update(id, districtRequest);
+  }
+
+  @Operation(summary = "Update district by ID", responses = {
+    @ApiResponse(
+      responseCode = "200",
+      content = @Content(
+        schema = @Schema(implementation = DistrictModel.class),
+        mediaType = "application/json")),
+    @ApiResponse(
+      responseCode = "400",
+      content = @Content(
+        schema = @Schema(implementation = ErrorResponseModel.class),
+        mediaType = "application/json")),
+    @ApiResponse(
+      responseCode = "404",
+      content = @Content(
+        schema = @Schema(implementation = ErrorResponseModel.class),
+        mediaType = "application/json")),
+    @ApiResponse(
+      responseCode = "409",
+      content = @Content(
+        schema = @Schema(implementation = ErrorResponseModel.class),
+        mediaType = "application/json")),
+    @ApiResponse(
+      responseCode = "500",
+      content = @Content(
+        schema = @Schema(implementation = ErrorResponseModel.class),
+        mediaType = "application/json"))
+  })
+  @PatchMapping("/{id}")
+  public Mono<DistrictModel> partialUpdate(
+    @Valid @PathVariable UUID id,
+    @Valid @RequestBody Mono<DistrictPartialRequestModel> districtRequest) {
+    return this.service.partialUpdate(id, districtRequest);
   }
 
   @Operation(summary = "Delete district by ID", responses = {

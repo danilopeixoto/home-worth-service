@@ -5,15 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.UUID;
 
 @Builder(toBuilder = true)
@@ -29,7 +25,7 @@ public class DistrictModel {
   private UUID id;
 
   @Pattern(regexp = "[A-Z].*", message = "The name field must start with a capital letter.")
-  @Length(max = 45, message = "The name field must have a maximum of 45 characters.")
+  @Size(max = 45, message = "The name field must have a maximum of 45 characters.")
   @NotBlank(message = "The name field is required.")
   @JsonProperty("name")
   @Column("name")

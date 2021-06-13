@@ -1,5 +1,6 @@
 package com.meli.homeworth.api.configuration;
 
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,8 @@ public class ModelMapperConfiguration {
 
     mapper
       .getConfiguration()
-      .setMatchingStrategy(MatchingStrategies.STRICT);
+      .setMatchingStrategy(MatchingStrategies.STRICT)
+      .setPropertyCondition(Conditions.isNotNull());
 
     return mapper;
   }

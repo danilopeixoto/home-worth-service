@@ -1,6 +1,7 @@
 package com.meli.homeworth.api.service;
 
 import com.meli.homeworth.api.model.DistrictModel;
+import com.meli.homeworth.api.model.DistrictPartialRequestModel;
 import com.meli.homeworth.api.model.DistrictRequestModel;
 import com.meli.homeworth.api.repository.DistrictRepository;
 import org.modelmapper.ModelMapper;
@@ -64,6 +65,19 @@ public class DistrictService {
           .toBuilder()
           .id(district.getId())
           .build()))
+      .flatMap(this.repository::save)
+      .onErrorMap(
+        DataIntegrityViolationException.class,
+        (exception) -> new IllegalStateException("District name already exists."));
+  }
+
+  public Mono<DistrictModel> partialUpdate(UUID id, Mono<DistrictPartialRequestModel> districtRequest) {
+    return this.repository
+      .findById(id)
+      .switchIfEmpty(Mono.error(new NoSuchElementException("District resource not found.")))
+      .flatMap(district -> districtRequest
+        .doOnNext(districtUpdate -> this.modelMapper.map(districtUpdate, district))
+        .thenReturn(district))
       .flatMap(this.repository::save)
       .onErrorMap(
         DataIntegrityViolationException.class,

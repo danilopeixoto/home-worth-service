@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.function.TupleUtils;
 
 import java.util.Comparator;
 
@@ -18,15 +17,8 @@ public class HomeAppraisalService {
     return houseRequest.map(house -> new HouseAreaResponse(house, house.calculateArea()));
   }
 
-  public Mono<HouseValuationResponse> calculateValuation(Mono<HouseModel> houseRequest) {
-    return houseRequest
-      .flatMap(house -> Mono
-        .just(house)
-        .zipWith(this.districtService.findByName(house.getDistrict())))
-      .map(TupleUtils
-        .function((house, district) ->
-          new HouseValuationResponse(
-            house, house.calculateArea() * district.getSquareMeterPrice())));
+  public HouseValuationResponse calculateValuation(HouseModel house, DistrictModel district) {
+    return new HouseValuationResponse(house, house.calculateArea() * district.getSquareMeterPrice());
   }
 
   public Mono<RoomAreaResponse> getLargestRoom(Mono<HouseModel> houseRequest) {

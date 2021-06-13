@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 
@@ -16,7 +15,7 @@ import javax.validation.constraints.*;
 @Data
 public class RoomModel {
   @Pattern(regexp = "[A-Z].*", message = "The name field must start with a capital letter.")
-  @Length(max = 30, message = "The name field must have a maximum of 30 characters.")
+  @Size(max = 30, message = "The name field must have a maximum of 30 characters.")
   @NotBlank(message = "The name field is required.")
   @JsonProperty("name")
   private String name;
