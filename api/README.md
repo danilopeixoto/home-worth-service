@@ -6,6 +6,26 @@ A home appraisal API.
 
 * [OpenJDK (>=11)](https://openjdk.java.net)
 
+## Installation
+
+Build and run dependencies:
+
+```
+docker-compose -f ../docker-compose.development.yml up -d
+```
+
+Run tests:
+
+```
+gradlew test
+```
+
+Run service:
+
+```
+gradlew bootRun --args='--spring.profiles.active=development'
+```
+
 ## Tests
 
 * Controllers and services are testable.

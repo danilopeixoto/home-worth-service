@@ -8,7 +8,7 @@ WORKDIR /usr/bin/api/
 
 COPY . .
 
-RUN chmod +x gradlew && ./gradlew build
+RUN chmod +x gradlew && ./gradlew build --exclude-task test
 
 EXPOSE 8080
 
